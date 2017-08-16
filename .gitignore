@@ -2,3 +2,6 @@
 *.class
 *.out
 .idea/
+/bin/
+.classpath
+.project
