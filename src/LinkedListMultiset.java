@@ -23,9 +23,9 @@ public class LinkedListMultiset<T> extends Multiset<T>
 			return;
 		}
 
-		Node<T> node = new Node( current, null, item );
-		current.setTail( node );
-		current = node;
+		Node<T> node = new Node( this.current, null, item );
+		this.current.setTail( node );
+		this.current = node;
 	}
 
 
@@ -58,17 +58,50 @@ public class LinkedListMultiset<T> extends Multiset<T>
 
 
 	public void removeOne(T item) {
-		// Implement me!
-	} // end of removeOne()
+		Node<T> node = this.find( item );
+		if (node != null ) {
+			node.decrementCount();
+
+			if ( node.getCount() == 0 ) {
+				this.removeAll( item );
+			}
+		}
+	}
 
 
 	public void removeAll(T item) {
-		// Implement me!
-	} // end of removeAll()
+		Node<T> node = this.find( item );
+		if ( node == null ) {
+			return;
+		}
+
+		Node<T> head = node.getHead();
+		Node<T> tail = node.getTail();
+
+		if ( tail != null ) {
+			tail.setHead( head );
+		}
+
+		if ( head != null ) {
+			head.setTail( tail );
+		}
+
+		if ( node == this.head ) {
+			this.head = tail;
+		}
+
+		if ( node == this.current ) {
+			this.current = head;
+		}
+	}
 
 
 	public void print(PrintStream out) {
 		Node<T> position = head;
+
+		if ( position == null ) {
+			return;
+		}
 
 		while ( position.getTail() != null ) {
 			out.printf( "%s | %d\n", position.getData(), position.getCount());
@@ -78,6 +111,6 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		if ( position != null ) {
 			out.printf( "%s | %d\n", position.getData(), position.getCount());
 		}
-	} // end of print()
+	}
 
-} // end of class LinkedListMultiset
+}
