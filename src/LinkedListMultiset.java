@@ -4,8 +4,8 @@ import java.util.*;
 public class LinkedListMultiset<T> extends Multiset<T>
 {
 	/* Define variables to store references to the head node and tail node */
-	private Node<T> head;
-	private Node<T> tail;
+	public Node<T> head;
+	public Node<T> tail;
 
 	public LinkedListMultiset() {}
 
