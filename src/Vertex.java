@@ -34,18 +34,32 @@ class Vertex<T> {
     return this.data;
   }
 
+  public void setData(T data) {
+    this.data = data;
+  }
+
   public int getCount() {
     return this.count;
   }
 
+  public void setCount(int count) {
+    this.count = count;
+  }
+
   public void setLeft(Vertex<T> vertex) {
     this.left = vertex;
-    this.left.setParent( this );
+
+    if ( this.left != null ) {
+      this.left.setParent( this );
+    }
   }
 
   public void setRight(Vertex<T> vertex) {
     this.right = vertex;
-    this.right.setParent( this );
+
+    if ( this.right != null ) {
+      this.right.setParent( this );
+    }
   }
 
   public void setParent(Vertex<T> vertex) {
@@ -74,7 +88,29 @@ class Vertex<T> {
     }
   }
 
-  public Boolean hasChildren() {
-    return this.getLeft() == null && this.getRight() == null;
+  public int numberOfChildren() {
+    int count = 0;
+
+    if ( this.getLeft() != null ) {
+      count++;
+    }
+
+    if ( this.getRight() != null ) {
+      count++;
+    }
+
+    return count;
+  }
+
+  public Vertex<T> findSmallestChild() {
+    Vertex<T> parent = null;
+    Vertex<T> pos = this;
+
+    while ( pos != null ) {
+      parent = pos;
+      pos = pos.getLeft();
+    }
+
+    return parent;
   }
 }
