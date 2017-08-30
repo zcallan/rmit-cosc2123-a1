@@ -21,20 +21,21 @@ public class BstMultiset<T> extends Multiset<T>
 		/* Start the root vertex and insert */
 		while ( pos != null ) {
 			parent = pos;
+			int compareResult = ((String) pos.getData()).compareTo( (String) item );
 
-			if (((String) pos.getData()).compareTo( (String) item ) > 0) {
+			if (compareResult > 0) {
 				/* Move to the left */
 				pos = pos.getLeft();
 				continue;
 			}
 
-			if (((String) pos.getData()).compareTo( (String) item ) == 0) {
+			if (compareResult == 0) {
 				/* Increase the count */
 				pos.incrementCount();
 				return;
 			}
 
-			if (((String) pos.getData()).compareTo( (String) item ) < 0) {
+			if (compareResult < 0) {
 				/* Move to the right */
 				pos = pos.getRight();
 				continue;
@@ -43,13 +44,14 @@ public class BstMultiset<T> extends Multiset<T>
 
 		/* Insert the vertex */
 		if ( pos == null ) {
-			if (((String) parent.getData()).compareTo( (String) item ) > 0) {
+			int compareResult = ((String) parent.getData()).compareTo( (String) item );
+			if (compareResult > 0) {
 				/* Insert left */
 				parent.setLeft( vertex );
 				return;
 			}
 
-			if (((String) parent.getData()).compareTo( (String) item ) < 0) {
+			if (compareResult < 0) {
 				/* Insert right */
 				parent.setRight( vertex );
 				return;
@@ -63,18 +65,19 @@ public class BstMultiset<T> extends Multiset<T>
 
 		while ( pos != null ) {
 			parent = pos;
+			int compareResult = ((String) pos.getData()).compareTo( (String) item );
 
-			if (((String) pos.getData()).compareTo( (String) item ) > 0) {
+			if (compareResult > 0) {
 				/* Move to the left */
 				pos = pos.getLeft();
 				continue;
 			}
 
-			if (((String) pos.getData()).compareTo( (String) item ) == 0) {
+			if (compareResult == 0) {
 				return pos;
 			}
 
-			if (((String) pos.getData()).compareTo( (String) item ) < 0) {
+			if (compareResult < 0) {
 				/* Move to the right */
 				pos = pos.getRight();
 				continue;
