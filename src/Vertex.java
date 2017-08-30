@@ -26,6 +26,10 @@ class Vertex<T> {
     return this.right;
   }
 
+  public Vertex<T> getParent() {
+    return this.parent;
+  }
+
   public T getData() {
     return this.data;
   }
@@ -36,10 +40,16 @@ class Vertex<T> {
 
   public void setLeft(Vertex<T> vertex) {
     this.left = vertex;
+    this.left.setParent( this );
   }
 
   public void setRight(Vertex<T> vertex) {
     this.right = vertex;
+    this.right.setParent( this );
+  }
+
+  public void setParent(Vertex<T> vertex) {
+    this.parent = vertex;
   }
 
   public void incrementCount() {
@@ -51,15 +61,20 @@ class Vertex<T> {
       this.count--;
     }
   }
-  
+
   public void print(PrintStream out) {
-    out.println( "test" );
-    if ( this.left != null ) {
-      out.printf( "Left: %s", (String) this.left.getData() );
+    out.printf( "%s | %d\n", this.getData(), this.getCount());
+
+    if ( this.getLeft() != null ) {
+      this.getLeft().print(out);
     }
-    
-    if ( this.right != null ) {
-      out.printf( "Right: %s", (String) this.right.getData() );
+
+    if ( this.getRight() != null ) {
+      this.getRight().print(out);
     }
+  }
+
+  public Boolean hasChildren() {
+    return this.getLeft() == null && this.getRight() == null;
   }
 }

@@ -4,53 +4,114 @@ import java.util.*;
 public class BstMultiset<T> extends Multiset<T>
 {
   private Vertex<T> rootVertex;
-  
+
 	public BstMultiset() {}
 
 	public void add(T item) {
-	  System.out.println( "addsad" );
-	  if ( this.rootVertex == null ) {
-      this.rootVertex = new Vertex( item );
-      System.out.println( "Set root vertex" );
-      return;
-    }
-    
-    Vertex<T> vertex = new Vertex( item );
-    
-    if ( ((String) this.rootVertex.getData()).compareTo( (String) vertex.getData() ) > 0 ) {
-      System.out.println( "Setting right vertex" );
-      this.rootVertex.setRight( vertex );
-    } else {
-      System.out.println( "Setting left vertex" );
-      this.rootVertex.setLeft( vertex );
-    }
+		Vertex<T> vertex = new Vertex<T>(item);
+
+		if ( rootVertex == null ) {
+			this.rootVertex = vertex;
+			return;
+		}
+
+		Vertex<T> parent = null;
+		Vertex<T> pos = this.rootVertex;
+
+		/* Start the root vertex and insert */
+		while ( pos != null ) {
+			parent = pos;
+
+			if (((String) pos.getData()).compareTo( (String) item ) > 0) {
+				/* Move to the left */
+				pos = pos.getLeft();
+				continue;
+			}
+
+			if (((String) pos.getData()).compareTo( (String) item ) == 0) {
+				/* Increase the count */
+				pos.incrementCount();
+				return;
+			}
+
+			if (((String) pos.getData()).compareTo( (String) item ) < 0) {
+				/* Move to the right */
+				pos = pos.getRight();
+				continue;
+			}
+		}
+
+		/* Insert the vertex */
+		if ( pos == null ) {
+			if (((String) parent.getData()).compareTo( (String) item ) > 0) {
+				/* Insert left */
+				parent.setLeft( vertex );
+				return;
+			}
+
+			if (((String) parent.getData()).compareTo( (String) item ) < 0) {
+				/* Insert right */
+				parent.setRight( vertex );
+				return;
+			}
+		}
+	}
+
+	public Vertex<T> find(T item) {
+		Vertex<T> parent = null;
+		Vertex<T> pos = this.rootVertex;
+
+		while ( pos != null ) {
+			parent = pos;
+
+			if (((String) pos.getData()).compareTo( (String) item ) > 0) {
+				/* Move to the left */
+				pos = pos.getLeft();
+				continue;
+			}
+
+			if (((String) pos.getData()).compareTo( (String) item ) == 0) {
+				return pos;
+			}
+
+			if (((String) pos.getData()).compareTo( (String) item ) < 0) {
+				/* Move to the right */
+				pos = pos.getRight();
+				continue;
+			}
+		}
+
+		return null;
 	}
 
 	public int search(T item) {
-		// Implement me!
+		Vertex<T> vertex = this.find( item );
 
-		// default return, please override when you implement this method
+		if ( vertex != null ) {
+			return vertex.getCount();
+		}
+
 		return 0;
 	}
 
 
 	public void removeOne(T item) {
-		// Implement me!
+		Vertex<T> vertex = this.find( item );
+		if ( item != null ) {
+
+		}
 	}
-	
-	
+
+
 	public void removeAll(T item) {
-		// Implement me!
+
 	}
 
 
 	public void print(PrintStream out) {
-	  out.println( "Printing, " + ( this.rootVertex == null ) );
-	  if ( this.rootVertex != null ) {
-	    out.println( "shjdksjdfhslkdhfkjsf" );
-    } else {
-	    out.println( "No vertices to print." );
-    }
+		if ( this.rootVertex != null ) {
+			this.rootVertex.print( out );
+		}
 	}
 
 }

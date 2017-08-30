@@ -14,7 +14,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		/* Checks to see whether this is the first item in the list */
 		if ( head == null ) {
 			/* Creates a new node with no head or tail */
-			Node<T> node = new Node( item );
+			Node<T> node = new Node<T>( item );
 			/* Set the head and current node variables to the newly created node */
 			this.head = node;
 			this.tail = node;
@@ -35,7 +35,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		 * this item, set the tail of the current tail node to reference the newly
 		 * created node and set the tail of the LinkedListMultiset to point to it.
 		 */
-		Node<T> node = new Node( this.tail, null, item );
+		Node<T> node = new Node<T>( this.tail, null, item );
 		this.tail.setTail( node );
 		this.tail = node;
 	}

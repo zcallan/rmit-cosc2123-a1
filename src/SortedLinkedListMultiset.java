@@ -7,7 +7,7 @@ public class SortedLinkedListMultiset<T> extends LinkedListMultiset<T>
 		/* Checks to see whether this is the first item in the list */
 		if ( head == null ) {
 			/* Creates a new node with no head or tail */
-			Node<T> node = new Node( item );
+			Node<T> node = new Node<T>( item );
 			/* Set the head and current node variables to the newly created node */
 			this.head = node;
 			this.tail = node;
@@ -34,10 +34,10 @@ public class SortedLinkedListMultiset<T> extends LinkedListMultiset<T>
 			}
 
 			if ( pos == null ) {
-				Node<T> node = new Node( prev, pos, item );
+				Node<T> node = new Node<T>( prev, pos, item );
 				prev.setTail( node );
 			} else {
-				Node<T> node = new Node( prev, pos, item );
+				Node<T> node = new Node<T>( prev, pos, item );
 				if ( pos.getHead() == null ) {
 					this.head = node;
 				}
