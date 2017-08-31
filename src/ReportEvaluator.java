@@ -6,22 +6,22 @@ public class ReportEvaluator {
   protected static final String progName = "ReportEvaluator";
   protected static DataGenerator generator = new DataGenerator();
   protected static final PrintStream outStream = System.out;
-  
+
   public static void printUsage() {
     System.err.println( progName + ": <scenario> = <shoppingList | classList>" );
     System.exit( 1 );
   }
-  
+
   public static void evaluateShoppingList( int multiplesOfArray ) {
     try {
       List<String> groceryList = generator.getShoppingList();
-  
+
       for ( int i = 0; i < multiplesOfArray; i++ ) {
         groceryList.addAll( generator.getShoppingList() );
       }
-      
+
       Collections.shuffle( groceryList );
-      
+
       for ( String item : groceryList ) {
         System.out.println( item );
       }
@@ -29,17 +29,17 @@ public class ReportEvaluator {
       System.out.println( e );
     }
   }
-  
+
   public static void evaluateClassList( int multiplesOfArray ) {
     try {
-      List<String> classList = generator.g();
-      
+      List<String> classList = generator.getClassList();
+
       for ( int i = 0; i < multiplesOfArray; i++ ) {
         classList.addAll( generator.getClassList() );
       }
-  
+
       Collections.shuffle( classList );
-  
+
       for ( String item : classList ) {
         System.out.println( item );
       }
@@ -47,23 +47,23 @@ public class ReportEvaluator {
       System.out.println( e );
     }
   }
-  
+
   public static void processOperations(BufferedReader inReader, Multiset<String> multiset) throws IOException {
     String line;
     int lineNum = 1;
     boolean bQuit = false;
-    
+
     // continue reading in commands until we either receive the quit signal or there are no more input commands
     while (!bQuit && (line = inReader.readLine()) != null) {
       String[] tokens = line.split(" ");
-      
+
       // check if there is at least an operation command
       if (tokens.length < 1) {
         System.err.println(lineNum + ": not enough tokens.");
         lineNum++;
         continue;
       }
-      
+
       String command = tokens[0];
       // determine which operation to execute
       switch (command.toUpperCase()) {
@@ -114,35 +114,35 @@ public class ReportEvaluator {
         default:
           System.err.println(lineNum + ": Unknown command.");
       }
-      
+
       lineNum++;
     }
   }
-  
+
   public static void main( String[] args ) {
     if ( args.length != 3 ) {
       System.err.println( "Incorrect number of arguments." );
       printUsage();
     }
-    
+
     String scenario = args[0];
     int multiplesOfArray = Integer.parseInt( args[1] );
     String implementationType = args[2];
-    
+
     switch ( scenario ) {
       case "shoppingList":
         evaluateShoppingList( multiplesOfArray );
         break;
-  
+
       case "classList":
         evaluateClassList( multiplesOfArray );
         break;
-      
+
       default:
         System.err.println( "Unknown scenario." );
         printUsage();
     }
-  
+
     Multiset<String> multiset = null;
     switch ( implementationType ) {
       case "linkedlist":
@@ -164,7 +164,7 @@ public class ReportEvaluator {
         System.err.println( "Unknown implmementation type." );
         printUsage();
     }
-  
+
     // construct in and output streams/writers/readers, then process each operation.
     try {
       BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
