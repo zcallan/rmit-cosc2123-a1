@@ -1,1 +1,43 @@
-{{data}}
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+  </head>
+  <body>
+    <style>
+      #holder {
+        width: 800px;
+        height: 400px;
+      }
+    </style>
+    <div id="holder">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    <script>
+    var data = {{data}};
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map( d => d.runs ),
+            datasets: [{
+                label: 'Run time',
+                data: data.map( d => d.time ),
+                fill: false,
+                backgroundColor: '#2980b9',
+                borderColor: '#2980b9',
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+  </body>
+</html>
