@@ -37,3 +37,12 @@ function runTest( list, implementation, items, runs, removals, searches, callbac
 }
 
 generateReport( 'test', 'shoppingList', 'bst', 100, 1000, 1, 100 );
+generateReport( 'test', 'shoppingList', 'linkedlist', 100, 1000, 1, 100 );
+generateReport( 'test', 'shoppingList', 'sortedlinkedlist', 100, 1000, 1, 100 );
+generateReport( 'test', 'shoppingList', 'hash', 100, 1000, 1, 100 );
+generateReport( 'test', 'shoppingList', 'baltree', 100, 1000, 1, 100 );
+generateReport( 'test', 'classList', 'bst', 100, 1000, 1, 100 );
+generateReport( 'test', 'classList', 'linkedlist', 100, 1000, 1, 100 );
+generateReport( 'test', 'classList', 'sortedlinkedlist', 100, 1000, 1, 100 );
+generateReport( 'test', 'classList', 'hash', 100, 1000, 1, 100 );
+generateReport( 'test', 'classList', 'baltree', 100, 1000, 1, 100 );
