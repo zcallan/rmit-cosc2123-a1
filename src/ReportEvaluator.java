@@ -8,7 +8,7 @@ public class ReportEvaluator {
   protected static final PrintStream outStream = System.out;
 
   public static void main( String[] args ) {
-    if ( args.length != 4 ) {
+    if ( args.length != 6 ) {
       System.err.println( "Incorrect number of arguments." );
       printUsage();
     }
@@ -17,6 +17,8 @@ public class ReportEvaluator {
     int items = Integer.parseInt( args[1] );
     String implementationType = args[2];
     int runs = Integer.parseInt( args[3] );
+    int removes = Integer.parseInt( args[4] );
+    int searches = Integer.parseInt( args[5] );
     List<String> inputs = null;
 
     switch ( scenario ) {
@@ -33,22 +35,16 @@ public class ReportEvaluator {
         printUsage();
     }
 
-    Multiset<String> multiset = null;
     switch ( implementationType ) {
       case "linkedlist":
-        multiset = new LinkedListMultiset<String>();
         break;
       case "sortedlinkedlist":
-        multiset = new SortedLinkedListMultiset<String>();
         break;
       case "bst":
-        multiset = new BstMultiset<String>();
         break;
       case "hash":
-        multiset = new HashMultiset<String>();
         break;
       case "baltree":
-        multiset = new BalTreeMultiset<String>();
         break;
       default:
         System.err.println( "Unknown implmementation type." );
@@ -56,11 +52,11 @@ public class ReportEvaluator {
         return;
     }
 
-    runScenario( multiset, scenario, runs, inputs );
+    runScenario( implementationType, runs, inputs, removes, searches );
   }
 
   public static void printUsage() {
-    System.err.println( progName + ": <scenario> = <shoppingList | classList> <listMultiples> <implementation> <runs>" );
+    System.err.println( progName + ": <scenario> = <shoppingList | classList> <items> <implementation> <runs> <removes> <searches>" );
     System.exit( 1 );
   }
 
@@ -104,9 +100,65 @@ public class ReportEvaluator {
     return new ArrayList<String>();
   }
 
-  public static void runScenario( Multiset<String> multiset, String scenario, int runs, List<String> inputs ) {
-    System.out.println(scenario);
-    System.out.println(runs);
-    System.out.println(inputs.size());
+  public static void runScenario( String implementationType, int runs, List<String> inputs, int removes, int searches ) {
+    if ( removes > inputs.size() || searches > inputs.size() ) {
+      System.err.println( "Number of removes and number of searches must be less than number of items" );
+      System.exit( 1 );
+    }
+
+    long total = 0;
+
+    for (int i = 0; i < runs; i++) {
+      Multiset<String> multiset = null;
+
+      switch ( implementationType ) {
+        case "linkedlist":
+          multiset = new LinkedListMultiset<String>();
+          break;
+        case "sortedlinkedlist":
+          multiset = new SortedLinkedListMultiset<String>();
+          break;
+        case "bst":
+          multiset = new BstMultiset<String>();
+          break;
+        case "hash":
+          multiset = new HashMultiset<String>();
+          break;
+        case "baltree":
+          multiset = new BalTreeMultiset<String>();
+          break;
+        default:
+          System.err.println( "Unknown implmementation type." );
+          printUsage();
+          return;
+      }
+
+      total += doRun( multiset, inputs, removes, searches );
+    }
+
+    System.out.println(( total / runs ));
+  }
+
+  public static long doRun( Multiset<String> multiset, List<String> inputs, int removes, int searches ) {
+    long startTime = System.nanoTime();
+
+    /* Do the adds */
+    for ( int i = 0; i < inputs.size(); i++ ) {
+      multiset.add(inputs.get(i));
+    }
+
+    /* Do the removes */
+    Random random = new Random();
+    for ( int i = 0; i < removes; i++ ) {
+      multiset.removeOne(inputs.get(random.nextInt(inputs.size())));
+    }
+
+    /* Do the searches */
+    for ( int i = 0; i < searches; i++ ) {
+      multiset.search(inputs.get(random.nextInt(inputs.size())));
+    }
+
+    long endTime = System.nanoTime();
+    return endTime - startTime;
   }
 }
