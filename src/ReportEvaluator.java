@@ -7,65 +7,25 @@ public class ReportEvaluator {
   protected static DataGenerator generator = new DataGenerator();
   protected static final PrintStream outStream = System.out;
 
-  public static void printUsage() {
-    System.err.println( progName + ": <scenario> = <shoppingList | classList>" );
-    System.exit( 1 );
-  }
-
-  public static List<String> evaluateShoppingList( int multiplesOfArray ) {
-    try {
-      List<String> groceryList = generator.getShoppingList();
-
-      for ( int i = 0; i < multiplesOfArray; i++ ) {
-        groceryList.addAll( generator.getShoppingList() );
-      }
-
-      Collections.shuffle( groceryList );
-
-      return groceryList;
-    } catch (Exception e) {
-      System.out.println( e );
-    }
-
-    return new ArrayList<String>();
-  }
-
-  public static List<String> evaluateClassList( int multiplesOfArray ) {
-    try {
-      List<String> classList = generator.getClassList();
-
-      for ( int i = 0; i < multiplesOfArray; i++ ) {
-        classList.addAll( generator.getClassList() );
-      }
-
-      Collections.shuffle( classList );
-
-      return classList;
-    } catch (Exception e) {
-      System.out.println( e );
-    }
-
-    return new ArrayList<String>();
-  }
-
   public static void main( String[] args ) {
-    if ( args.length != 3 ) {
+    if ( args.length != 4 ) {
       System.err.println( "Incorrect number of arguments." );
       printUsage();
     }
 
     String scenario = args[0];
-    int multiplesOfArray = Integer.parseInt( args[1] );
+    int items = Integer.parseInt( args[1] );
     String implementationType = args[2];
-    List<String> inputs;
+    int runs = Integer.parseInt( args[3] );
+    List<String> inputs = null;
 
     switch ( scenario ) {
       case "shoppingList":
-        inputs = evaluateShoppingList( multiplesOfArray );
+        inputs = evaluateShoppingList( items );
         break;
 
       case "classList":
-        inputs = evaluateClassList( multiplesOfArray );
+        inputs = evaluateClassList( items );
         break;
 
       default:
@@ -93,6 +53,60 @@ public class ReportEvaluator {
       default:
         System.err.println( "Unknown implmementation type." );
         printUsage();
+        return;
     }
+
+    runScenario( multiset, scenario, runs, inputs );
+  }
+
+  public static void printUsage() {
+    System.err.println( progName + ": <scenario> = <shoppingList | classList> <listMultiples> <implementation> <runs>" );
+    System.exit( 1 );
+  }
+
+  public static List<String> evaluateShoppingList( int items ) {
+    try {
+      List<String> groceryList = generator.getShoppingList();
+      List<String> list = new ArrayList<String>();
+      Random random = new Random();
+
+      for ( int i = 0; i < items; i++ ) {
+        list.add( groceryList.get(random.nextInt(groceryList.size())));
+      }
+
+      Collections.shuffle( list );
+
+      return list;
+    } catch (Exception e) {
+      System.out.println( e );
+    }
+
+    return new ArrayList<String>();
+  }
+
+  public static List<String> evaluateClassList( int items ) {
+    try {
+      List<String> classList = generator.getClassList();
+      List<String> list = new ArrayList<String>();
+      Random random = new Random();
+
+      for ( int i = 0; i < items; i++ ) {
+        list.add( classList.get(random.nextInt(classList.size())));
+      }
+
+      Collections.shuffle( list );
+
+      return list;
+    } catch (Exception e) {
+      System.out.println( e );
+    }
+
+    return new ArrayList<String>();
+  }
+
+  public static void runScenario( Multiset<String> multiset, String scenario, int runs, List<String> inputs ) {
+    System.out.println(scenario);
+    System.out.println(runs);
+    System.out.println(inputs.size());
   }
 }
