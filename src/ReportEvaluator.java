@@ -12,7 +12,7 @@ public class ReportEvaluator {
     System.exit( 1 );
   }
 
-  public static void evaluateShoppingList( int multiplesOfArray ) {
+  public static List<String> evaluateShoppingList( int multiplesOfArray ) {
     try {
       List<String> groceryList = generator.getShoppingList();
 
@@ -22,15 +22,15 @@ public class ReportEvaluator {
 
       Collections.shuffle( groceryList );
 
-      for ( String item : groceryList ) {
-        System.out.println( item );
-      }
+      return groceryList;
     } catch (Exception e) {
       System.out.println( e );
     }
+
+    return new ArrayList<String>();
   }
 
-  public static void evaluateClassList( int multiplesOfArray ) {
+  public static List<String> evaluateClassList( int multiplesOfArray ) {
     try {
       List<String> classList = generator.getClassList();
 
@@ -40,83 +40,12 @@ public class ReportEvaluator {
 
       Collections.shuffle( classList );
 
-      for ( String item : classList ) {
-        System.out.println( item );
-      }
+      return classList;
     } catch (Exception e) {
       System.out.println( e );
     }
-  }
 
-  public static void processOperations(BufferedReader inReader, Multiset<String> multiset) throws IOException {
-    String line;
-    int lineNum = 1;
-    boolean bQuit = false;
-
-    // continue reading in commands until we either receive the quit signal or there are no more input commands
-    while (!bQuit && (line = inReader.readLine()) != null) {
-      String[] tokens = line.split(" ");
-
-      // check if there is at least an operation command
-      if (tokens.length < 1) {
-        System.err.println(lineNum + ": not enough tokens.");
-        lineNum++;
-        continue;
-      }
-
-      String command = tokens[0];
-      // determine which operation to execute
-      switch (command.toUpperCase()) {
-        // add
-        case "A":
-          if (tokens.length == 2) {
-            multiset.add(tokens[1]);
-          }
-          else {
-            System.err.println(lineNum + ": not enough tokens.");
-          }
-          break;
-        // search
-        case "S":
-          if (tokens.length == 2) {
-            int foundNumber = multiset.search(tokens[1]);
-          }
-          else {
-            System.err.println(lineNum + ": not enough tokens.");
-          }
-          break;
-        // remove one instance
-        case "RO":
-          if (tokens.length == 2) {
-            multiset.removeOne(tokens[1]);
-          }
-          else {
-            System.err.println(lineNum + ": not enough tokens.");
-          }
-          break;
-        // remove all instances
-        case "RA":
-          if (tokens.length == 2) {
-            multiset.removeAll(tokens[1]);
-          }
-          else {
-            System.err.println(lineNum + ": not enough tokens.");
-          }
-          break;
-        // print
-        case "P":
-          multiset.print(outStream);
-          break;
-        // quit
-        case "Q":
-          bQuit = true;
-          break;
-        default:
-          System.err.println(lineNum + ": Unknown command.");
-      }
-
-      lineNum++;
-    }
+    return new ArrayList<String>();
   }
 
   public static void main( String[] args ) {
@@ -128,14 +57,15 @@ public class ReportEvaluator {
     String scenario = args[0];
     int multiplesOfArray = Integer.parseInt( args[1] );
     String implementationType = args[2];
+    List<String> inputs;
 
     switch ( scenario ) {
       case "shoppingList":
-        evaluateShoppingList( multiplesOfArray );
+        inputs = evaluateShoppingList( multiplesOfArray );
         break;
 
       case "classList":
-        evaluateClassList( multiplesOfArray );
+        inputs = evaluateClassList( multiplesOfArray );
         break;
 
       default:
@@ -163,15 +93,6 @@ public class ReportEvaluator {
       default:
         System.err.println( "Unknown implmementation type." );
         printUsage();
-    }
-
-    // construct in and output streams/writers/readers, then process each operation.
-    try {
-      BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
-      // process the operations
-      processOperations(inReader, multiset);
-    } catch (IOException e) {
-      System.err.println(e.getMessage());
     }
   }
 }
