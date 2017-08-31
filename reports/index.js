@@ -6,11 +6,12 @@ const { exec } = require('child_process');
 function generateReport( name, list, implementation, items, runs, minRemovals, maxRemovals ) {
   let total = maxRemovals - minRemovals;
   const data = [];
-  async.timesSeries( total, (n, next) => {
+  async.timesSeries( total + 2, (n, next) => {
     runTest( list, implementation, items, runs, n, 0, time => {
+      time = parseInt(time.replace('\n', ''));
       data.push({
         runs: n,
-        time: parseInt(time.replace('\n', '')),
+        time,
       });
       console.log( n );
       next();
@@ -36,4 +37,4 @@ function runTest( list, implementation, items, runs, removals, searches, callbac
   });
 }
 
-generateReport( 'test', 'shoppingList', 'bst', 100, 1000, 1, 100 );
+generateReport( 'test', 'shoppingList', 'bst', 1000, 1000, 1, 1000 );
